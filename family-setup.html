@@ -1,0 +1,21 @@
+<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>おもいと｜家族グループ準備</title>
+<style>:root{font-family:-apple-system,BlinkMacSystemFont,'Hiragino Kaku Gothic ProN',sans-serif;color:#684840;background:#fff8f3}*{box-sizing:border-box}body{margin:0}main{max-width:520px;margin:0 auto;padding:calc(22px + env(safe-area-inset-top)) 18px calc(30px + env(safe-area-inset-bottom))}header{text-align:center}header img{width:96px;border-radius:20px}h1{color:#a45e57;margin:8px 0 4px}p{line-height:1.7}.hint{background:#fff0d6;color:#765839;border-radius:14px;padding:14px;font-size:14px}.card{background:white;border:1px solid #f4ddce;border-radius:22px;padding:18px;margin:16px 0}.status{font-weight:700}button{font:inherit;border:0;border-radius:13px;padding:13px;min-height:46px;background:#d0847b;color:#fff;font-weight:700}button:disabled{opacity:.5}.ghost{background:#fff0e9;color:#80534e}a{color:#a45e57}#uid{overflow-wrap:anywhere;background:#f9f3f0;border-radius:10px;padding:10px;font-family:monospace}#error{color:#9f3737;white-space:pre-wrap}label{display:block;margin:10px 0 5px;font-weight:700}input{display:block;width:100%;padding:12px;border-radius:12px;border:1px solid #d8bbb0;font-size:16px}small{color:#846d65}</style></head><body><main>
+<header><img src="logo.jpg" alt="おもいと正式ロゴ"><h1>おもいと</h1><div>家族グループ準備｜Ver.0.4</div></header>
+<p class="hint">この画面は<strong>管理者UIDの確認専用</strong>です。家族データの作成・共有・承認はまだできません。FirebaseのFirestoreルールは変更しないでください。</p>
+<div class="card"><p id="status" class="status">Firebaseに接続中…</p><div id="error" role="alert"></div><div id="signedOut" hidden><p>保護者のテストアカウントでログインしてください。</p><form id="form"><label for="email">メールアドレス</label><input id="email" type="email" autocomplete="username" required><label for="password">パスワード</label><input id="password" type="password" autocomplete="current-password" required><p><button type="submit" id="submit">ログイン</button></p></form></div><div id="signedIn" hidden><p>Firebase認証を確認しました。下はユーザー識別用のUIDです（パスワードではありません）。</p><p id="uid"></p><button type="button" id="copy">UIDをコピー</button> <button type="button" class="ghost" id="logout">ログアウト</button><p><small>UIDは個人に紐づく識別子です。共有する際は不特定多数へ公開しないでください。</small></p></div></div>
+<div class="card"><strong>次の工程</strong><p>①管理者UIDの確認 → ②管理者限定ルールの完成 → ③ルールを検証 → ④家族グループ作成 → ⑤子どもの承認機能</p><p>安全のため、②〜⑤は現段階では未実装です。</p></div><p style="text-align:center"><a href="login-test.html">ログインテスト</a> ｜ <a href="index.html">既存ホーム</a></p>
+</main><script>
+(function(){
+ const status=document.getElementById('status'),error=document.getElementById('error'),off=document.getElementById('signedOut'),on=document.getElementById('signedIn');
+ const configPromise=import('./firebase-config.js').then(m=>m.default);
+ const fail=e=>{status.textContent='接続を確認できませんでした';error.textContent=e?.code||e?.message||String(e)};
+ (async()=>{try{
+ const appSdk=await import('https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js');
+ const authSdk=await import('https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js');
+ const config=await configPromise; if(!config?.apiKey||!config?.appId)throw new Error('接続設定が見つかりません');const auth=authSdk.getAuth(appSdk.initializeApp(config));
+ authSdk.onAuthStateChanged(auth,user=>{status.textContent=user?'保護者テストアカウントでログイン中':'未ログイン';off.hidden=!!user;on.hidden=!user;document.getElementById('uid').textContent=user?.uid||'';error.textContent='';},fail);
+ document.getElementById('form').addEventListener('submit',async e=>{e.preventDefault();const b=document.getElementById('submit');b.disabled=true;error.textContent='';try{await authSdk.signInWithEmailAndPassword(auth,document.getElementById('email').value,document.getElementById('password').value);document.getElementById('password').value='';}catch(e){fail(e)}finally{b.disabled=false}});
+ document.getElementById('logout').addEventListener('click',async()=>{try{await authSdk.signOut(auth)}catch(e){fail(e)}});
+ document.getElementById('copy').addEventListener('click',async()=>{const t=document.getElementById('uid').textContent;try{await navigator.clipboard.writeText(t);document.getElementById('copy').textContent='コピーしました'}catch(e){error.textContent='コピーできない場合はUIDを長押ししてコピーしてください'}});
+ }catch(e){fail(e)}})();
+})();</script></body></html>
