@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>おもいと｜保護者ログイン検証</title>
+<style>:root{font-family:-apple-system,BlinkMacSystemFont,'Hiragino Kaku Gothic ProN',sans-serif;color:#65453d;background:#fff8f3}*{box-sizing:border-box}body{margin:0}main{max-width:500px;margin:auto;padding:calc(28px + env(safe-area-inset-top)) 18px 30px}header{text-align:center}header img{width:110px;border-radius:22px}h1{color:#a45e57;margin:8px 0 2px}.sub{color:#90786d}section{background:white;border:1px solid #f6ded1;border-radius:22px;padding:20px;margin-top:20px}label{display:block;font-weight:650;margin-top:14px}input{width:100%;padding:13px;border:1px solid #ddbbb0;border-radius:12px;font-size:16px;margin-top:7px}button{font:inherit;border:0;border-radius:13px;padding:14px 16px;min-height:48px;cursor:pointer}button:disabled{opacity:.5}.primary{background:#d3817a;color:white;font-weight:700;width:100%;margin-top:20px}.secondary{background:#fff0e9;color:#80534e;margin-top:12px;width:100%}.notice{background:#fff0d6;color:#74583d;border-radius:13px;padding:12px;font-size:13px;line-height:1.7;margin-top:18px}#message{white-space:pre-wrap;line-height:1.6;font-size:14px;min-height:24px}.ok{color:#217953}.error{color:#a33b3b}a{color:#a45e57}</style></head>
+<body><main><header><img src="logo.jpg" alt="おもいと正式ロゴ"><h1>おもいと</h1><div class="sub">保護者ログイン｜接続テスト Ver.0.3.1</div></header>
+<div class="notice">認証機能の検証専用画面です。共有・家族招待・データベース連携は未実装です。個人情報や本番パスワードは入力しないでください。</div>
+<section><div id="mode">画面表示成功。Firebase接続を確認中…</div>
+<form id="login" hidden><label for="email">テスト用メールアドレス</label><input id="email" type="email" autocomplete="username" required maxlength="254"><label for="password">テスト用パスワード</label><input id="password" type="password" autocomplete="current-password" required minlength="6"><button id="loginButton" class="primary" type="submit">ログインテスト</button></form>
+<div id="message" role="status" aria-live="polite"></div><div id="account" hidden><p>Firebaseの認証状態を確認しました。共有データへの権限はありません。</p><button id="logout" class="secondary">ログアウト</button></div></section>
+<p style="font-size:12px;text-align:center"><a href="index.html">← Ver.0.2のホームへ戻る</a></p></main>
+<script>
+(function(){
+const mode=document.getElementById('mode'), form=document.getElementById('login'), msg=document.getElementById('message'), account=document.getElementById('account');
+function showError(text){mode.textContent='接続を確認できませんでした';msg.className='error';msg.textContent=text+'（画面表示は正常です）';}
+const timeout=new Promise((_,reject)=>setTimeout(()=>reject(new Error('接続確認が15秒以内に完了しませんでした。通信・外部スクリプトの読み込みをご確認ください。')),15000));
+async function start(){
+try{
+ const setup=async()=>{
+  const configModule=await import('./firebase-config.js');
+  const config=configModule.default;
+  if(!config || !['apiKey','authDomain','projectId','appId'].every(k=>typeof config[k]==='string'&&config[k]))throw new Error('接続設定を確認できませんでした。');
+  const appSdk=await import('https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js');
+  const authSdk=await import('https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js');
+  const auth=authSdk.getAuth(appSdk.initializeApp(config));
+  authSdk.onAuthStateChanged(auth,user=>{
+    mode.textContent=user?'Firebase認証：ログイン済み':'Firebase認証：未ログイン';
+    form.hidden=!!user;account.hidden=!user;
+    if(user){msg.className='ok';msg.textContent='認証を確認しました（家族共有機能は未実装）';}
+  },e=>showError('認証状態の取得に失敗：'+(e.code||'unknown')));
+  form.addEventListener('submit',async e=>{e.preventDefault();const btn=document.getElementById('loginButton');btn.disabled=true;msg.textContent='ログイン確認中…';try{await authSdk.signInWithEmailAndPassword(auth,document.getElementById('email').value,document.getElementById('password').value);document.getElementById('password').value='';}catch(err){msg.className='error';msg.textContent=err.code==='auth/invalid-credential'?'テスト用アカウントの入力内容を確認してください。':'ログイン失敗：'+(err.code||'unknown');}finally{btn.disabled=false;}});
+  document.getElementById('logout').addEventListener('click',async()=>{await authSdk.signOut(auth);msg.textContent='ログアウトしました。';});
+ };
+ await Promise.race([setup(),timeout]);
+}catch(err){showError(err.message||'不明なエラー');}
+}
+start();
+})();
+</script></body></html>
