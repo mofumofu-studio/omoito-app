@@ -123,7 +123,7 @@ header{margin-bottom:9px;gap:8px}
 .shift-selected-summary{font-size:12px;color:#806056;line-height:1.45;margin:10px 2px 0;overflow-wrap:anywhere}
 @media(max-width:375px){.shift-form .shift-row{gap:8px}.shift-form input[type="time"]{padding:7px 3px}.shift-calendar-grid{gap:2px}.shift-calendar-day{min-height:39px}}
 
-/* 1.0.16: 月表示を読みやすく。予定・シフト・送迎を見分けやすく */
+/* 1.0.17: シフト入力枠と月カレンダー余白・時刻表示を再調整 */
 .calendar-grid{gap:3px}
 .calendar-week{padding:4px 0}
 .calendar-day{min-height:88px;padding:4px 2px;gap:3px;border-radius:10px}
@@ -163,7 +163,86 @@ header{margin-bottom:9px;gap:8px}
  .calendar-event-label,.calendar-shift-label,.calendar-pickup-label{font-size:9px;line-height:1.2;padding:2px 1px 2px 2px;border-left-width:2px}
  .shift-form .shift-row{gap:8px}
 }
-</style></head><body><main><header><div class="brand"><img src="logo.jpg" alt="おもいと 正式ロゴ"><div><h1>おもいと</h1><small>家族の想いを、ひとつに。</small></div></div><div class="header-right"><span class="pill">☁️ Firebase版 1.0.16</span><div class="header-status" role="status"><span id="syncStatus">接続準備中…</span><button class="light small hidden" id="logoutButton" style="display:none" onclick="logout()">ログアウト</button></div></div></header><div id="authPanel" class="card"><div class="title">🔐 家族アカウントでログイン</div><p class="muted">家族で共有するFirebase登録済みのメールアドレスとパスワードを入力してください。</p><form id="loginForm" onsubmit="login(event)"><label>メールアドレス</label><input type="email" name="email" autocomplete="username" required><label>パスワード</label><input type="password" name="password" autocomplete="current-password" required><button class="primary" type="submit">ログイン</button></form><p id="loginError" class="muted" role="alert"></p></div><div id="content" class="hidden"></div></main><nav class="tabs hidden" id="navTabs" aria-label="主要メニュー"><div class="tabs-inner" id="tabs"></div></nav><div id="undoToast" class="toast hidden" role="status" aria-live="polite"><span>項目を削除しました</span><button onclick="undoDelete()">元に戻す</button></div>
+
+/* 1.0.17 tune */
+.schedule-calendar-card{padding:12px 10px 14px}
+.schedule-calendar-card .calendar-head{margin-bottom:6px}
+.schedule-calendar-card .calendar-filter{margin-bottom:6px;gap:8px}
+.schedule-calendar-card .calendar-legend{margin:2px 0 6px;gap:4px 9px}
+.schedule-calendar-card .calendar-grid{gap:2px}
+.schedule-calendar-card .calendar-day{min-height:88px;padding:4px 0 3px;border-radius:10px}
+.schedule-calendar-card .calendar-day .calendar-num{margin-left:3px;font-size:14px}
+.schedule-calendar-card .calendar-labels{padding:0;gap:2px}
+.schedule-calendar-card .calendar-event-label,.schedule-calendar-card .calendar-shift-label,.schedule-calendar-card .calendar-pickup-label{width:100%;max-width:100%;padding:2px 1px 2px 2px;border-left-width:3px;border-radius:3px}
+.schedule-calendar-card .calendar-shift-label{font-size:9px;line-height:1.05;letter-spacing:-0.1px}
+.schedule-calendar-card .calendar-event-label,.schedule-calendar-card .calendar-pickup-label{font-size:10px;line-height:1.1}
+.schedule-calendar-card .calendar-event-more{font-size:9px;line-height:1.05;padding-left:2px}
+.shift-form .shift-row{gap:8px}
+.shift-form .shift-row input[type="time"]{height:42px;min-height:42px;margin:6px 0 8px;padding:5px 2px;border-radius:12px;font-size:15px}
+.shift-form .shift-row input[type="time"]::-webkit-date-and-time-value{font-size:15px}
+@media(max-width:390px){
+ .schedule-calendar-card{padding:10px 8px 12px}
+ .schedule-calendar-card .calendar-day{min-height:84px}
+ .schedule-calendar-card .calendar-day .calendar-num{font-size:13px}
+ .schedule-calendar-card .calendar-event-label,.schedule-calendar-card .calendar-pickup-label{font-size:9px}
+ .schedule-calendar-card .calendar-shift-label{font-size:8px}
+}
+
+/* 1.0.18: 月マスをさらに広く。余白圧縮と文字サイズ微調整 */
+.schedule-calendar-card{padding:9px 5px 10px}
+.schedule-calendar-card .calendar-head{margin-bottom:4px;gap:6px}
+.schedule-calendar-card .calendar-filter{margin-bottom:4px;gap:6px}
+.schedule-calendar-card .calendar-legend{margin:1px 0 4px;gap:4px 8px;font-size:11px}
+.schedule-calendar-card .calendar-grid{gap:1px}
+.schedule-calendar-card .calendar-week{font-size:11px;padding:4px 0}
+.schedule-calendar-card .calendar-day{min-height:92px;padding:3px 0 2px;border-radius:9px}
+.schedule-calendar-card .calendar-day .calendar-num{margin-left:2px;font-size:13px}
+.schedule-calendar-card .calendar-labels{width:calc(100% - 2px);padding:0;gap:1px}
+.schedule-calendar-card .calendar-event-label,.schedule-calendar-card .calendar-pickup-label{font-size:9px;line-height:1.05;padding:2px 1px;border-left-width:3px;border-radius:2px}
+.schedule-calendar-card .calendar-shift-label{font-size:8px;line-height:1.0;padding:2px 1px;border-left-width:3px;border-radius:2px;letter-spacing:-0.2px}
+.schedule-calendar-card .calendar-event-more{font-size:8px;line-height:1.0;padding-left:1px}
+.schedule-calendar-card .calendar-agenda{margin-top:8px;padding-top:8px}
+.schedule-calendar-card .calendar-agenda h3{margin:0 0 5px;font-size:15px}
+.shift-form .shift-row{gap:6px;align-items:end}
+.shift-form .shift-row input[type="time"]{height:38px;min-height:38px;margin:4px 0 6px;padding:4px 2px;border-radius:10px;font-size:14px}
+.shift-form .shift-row input[type="time"]::-webkit-date-and-time-value{font-size:14px}
+@media(max-width:390px){
+ .schedule-calendar-card{padding:8px 4px 10px}
+ .schedule-calendar-card .calendar-day{min-height:88px}
+ .schedule-calendar-card .calendar-day .calendar-num{font-size:12px}
+ .schedule-calendar-card .calendar-event-label,.schedule-calendar-card .calendar-pickup-label{font-size:8px}
+ .schedule-calendar-card .calendar-shift-label{font-size:7px}
+ .schedule-calendar-card .calendar-week{font-size:10px}
+}
+
+/* 1.0.19: A案。月カレンダーを横幅いっぱいに。凡例は必要時のみ展開 */
+.schedule-calendar-card{padding:10px 4px 12px;margin-left:-12px;margin-right:-12px;border-radius:15px}
+.schedule-calendar-card .calendar-head{padding:0 7px;margin-bottom:5px}
+.schedule-calendar-card .calendar-head strong{font-size:16px}
+.schedule-calendar-card .calendar-nav{gap:3px}
+.schedule-calendar-card .calendar-nav button{min-width:38px;min-height:40px;padding:6px 7px}
+.schedule-calendar-card .calendar-filter{padding:0 7px;display:flex;flex-wrap:nowrap;align-items:center;gap:5px;margin-bottom:2px}
+.schedule-calendar-card .calendar-filter label{font-size:12px;white-space:nowrap;flex-shrink:0}
+.schedule-calendar-card .calendar-filter select{min-width:0;max-width:none;width:auto;flex:1;padding:7px 5px;margin:0;font-size:13px;min-height:40px}
+.schedule-calendar-card .calendar-legend-details{margin:0 7px 5px;font-size:11px;color:#86685d}
+.schedule-calendar-card .calendar-legend-details summary{cursor:pointer;list-style:revert;padding:3px 2px;min-height:24px}
+.schedule-calendar-card .calendar-legend-details .calendar-legend{margin:3px 0 5px;gap:4px 8px}
+.schedule-calendar-card .calendar-grid{gap:1px;width:100%;grid-template-columns:repeat(7,minmax(0,1fr))}
+.schedule-calendar-card .calendar-day{min-width:0;min-height:100px;border-radius:6px;padding:4px 0 3px}
+.schedule-calendar-card .calendar-day .calendar-num{margin-left:3px;font-size:14px}
+.schedule-calendar-card .calendar-labels{width:100%;min-width:0;gap:2px}
+.schedule-calendar-card .calendar-event-label,.schedule-calendar-card .calendar-pickup-label{font-size:10px;line-height:1.12;letter-spacing:0}
+.schedule-calendar-card .calendar-shift-label{font-size:8px;line-height:1.08;letter-spacing:-.15px}
+.schedule-calendar-card .calendar-agenda{margin-left:7px;margin-right:7px}
+@media(max-width:390px){
+ .schedule-calendar-card{padding:8px 3px 10px;margin-left:-13px;margin-right:-13px}
+ .schedule-calendar-card .calendar-head{padding:0 5px}
+ .schedule-calendar-card .calendar-filter{padding:0 5px}
+ .schedule-calendar-card .calendar-day{min-height:94px}
+ .schedule-calendar-card .calendar-event-label,.schedule-calendar-card .calendar-pickup-label{font-size:9px}
+ .schedule-calendar-card .calendar-shift-label{font-size:8px}
+}
+</style></head><body><main><header><div class="brand"><img src="logo.jpg" alt="おもいと 正式ロゴ"><div><h1>おもいと</h1><small>家族の想いを、ひとつに。</small></div></div><div class="header-right"><span class="pill">☁️ Firebase版 1.0.19</span><div class="header-status" role="status"><span id="syncStatus">接続準備中…</span><button class="light small hidden" id="logoutButton" style="display:none" onclick="logout()">ログアウト</button></div></div></header><div id="authPanel" class="card"><div class="title">🔐 家族アカウントでログイン</div><p class="muted">家族で共有するFirebase登録済みのメールアドレスとパスワードを入力してください。</p><form id="loginForm" onsubmit="login(event)"><label>メールアドレス</label><input type="email" name="email" autocomplete="username" required><label>パスワード</label><input type="password" name="password" autocomplete="current-password" required><button class="primary" type="submit">ログイン</button></form><p id="loginError" class="muted" role="alert"></p></div><div id="content" class="hidden"></div></main><nav class="tabs hidden" id="navTabs" aria-label="主要メニュー"><div class="tabs-inner" id="tabs"></div></nav><div id="undoToast" class="toast hidden" role="status" aria-live="polite"><span>項目を削除しました</span><button onclick="undoDelete()">元に戻す</button></div>
 <script>
 // おもいと Firebase版: 同一の家族アカウントで認証し、家族用データを同期します。
 const firebaseConfig={apiKey:'AIzaSyC1ZBUbhBf2iZM07_ZO98Bc_17J8bDhQEM',authDomain:'omoito-family.firebaseapp.com',projectId:'omoito-family',storageBucket:'omoito-family.firebasestorage.app',messagingSenderId:'826889232763',appId:'1:826889232763:web:fc9bfb'};
@@ -221,7 +300,7 @@ function editShift(id){const x=state.shifts.find(x=>String(x.id)===String(id));i
 function cancelShift(){adding=false;editing=null;shiftSelectedDates.clear();render()}
 function submitShift(e){e.preventDefault();if(!ready){alert('クラウドの接続を確認してね');return}const f=new FormData(e.target),date=String(f.get('date')||''),person=String(f.get('person')||''),start=String(f.get('start')||''),end=String(f.get('end')||''),note=String(f.get('note')||'').trim();if(!/^([01]\d|2[0-3]):[0-5]\d$/.test(start)||!/^([01]\d|2[0-3]):[0-5]\d$/.test(end)||!state.members.includes(person)){alert('担当者・時間を確認してね');return}if(start===end){alert('開始と終了の時刻を変えてね');return}if(editing!=null){if(!/^\d{4}-\d{2}-\d{2}$/.test(date)){alert('日付を確認してね');return}const x=state.shifts.find(x=>String(x.id)===String(editing));if(!x)return;Object.assign(x,{date,person,start,end,note})}else{const dates=[...shiftSelectedDates].sort();if(!dates.length){alert('カレンダーで登録する日を選んでね');showShiftPicker();return}if(dates.length>62){alert('一度に登録できるのは62日までです');return}const overlaps=dates.filter(d=>state.shifts.some(x=>x.date===d&&x.person===person));if(overlaps.length){alert(`${person}のシフトがすでに登録されている日があります（${overlaps.map(dateText).join('、')}）。重複登録を防ぐため、別の日を選んでね。`);return}const base=Date.now();dates.forEach((d,i)=>state.shifts.push({id:base+i,date:d,person,start,end,note}));shiftSelectedDates.clear()}save();adding=false;editing=null;render()}
 function removeShift(id){if(!ready)return;const x=state.shifts.find(x=>String(x.id)===String(id));if(!x||!confirm(`${x.person}の${dateText(x.date)}のシフトを削除しますか？`))return;state.shifts=state.shifts.filter(y=>String(y.id)!==String(id));save();render()}
-function calendarHTML(){const [year,month]=calendarMonth.split('-').map(Number);const start=new Date(year,month-1,1).getDay(),days=new Date(year,month,0).getDate();const eventMap=new Map();for(let day=1;day<=days;day++){const date=dateKey(year,month,day);eventMap.set(date,eventsOn(date,true))}const week=['日','月','火','水','木','金','土'];let cells=week.map(d=>`<div class="calendar-week">${d}</div>`).join('');for(let i=0;i<Math.ceil((start+days)/7)*7;i++){const n=i-start+1;if(n<1||n>days){cells+='<div aria-hidden="true"></div>';continue}const date=dateKey(year,month,n),dayEvents=eventMap.get(date)||[],dayShifts=shiftsOn(date),dayPickups=pickupOn(date).filter(x=>calendarFilter==='家族全員'||x.occ.child===calendarFilter||x.p.child===calendarFilter||x.p.child==='家族全員'),count=dayEvents.length+dayShifts.length+dayPickups.length,classes=[date===today()?'today':'',date===selectedCalendarDate?'selected':''].filter(Boolean).join(' ');cells+=`<button type="button" class="calendar-day ${classes}" aria-label="${month}月${n}日 ${count}件の予定" aria-pressed="${date===selectedCalendarDate}" onclick="selectCalendarDay('${date}')"><span class="calendar-num">${n}</span>${count?`<span class="calendar-labels">${dayEvents.slice(0,2).map(e=>`<span class="calendar-event-label" style="--event-color:${memberColor(e.person)};--event-bg:${memberColor(e.person)}24" title="${esc(e.title)}">${esc(e.title)}</span>`).join('')}${dayShifts.slice(0,Math.max(0,2-dayEvents.length)).map(x=>`<span class="calendar-shift-label" title="${esc(x.person)} ${esc(x.start)}〜${esc(x.end)}">🕒 ${esc(x.start)}〜${esc(x.end)}</span>`).join('')}${dayPickups.slice(0,Math.max(0,2-dayEvents.length-dayShifts.length)).map(x=>`<span class="calendar-pickup-label" title="${esc(x.occ.title||x.p.title)}">🚗 ${esc(x.occ.title||x.p.title)}</span>`).join('')}${count>2?`<span class="calendar-event-more">＋${count-2}件</span>`:''}</span>`:''}</button>`}const items=eventsOn(selectedCalendarDate,true),selectedShifts=shiftsOn(selectedCalendarDate),selectedPickups=pickupOn(selectedCalendarDate).filter(x=>calendarFilter==='家族全員'||x.occ.child===calendarFilter||x.p.child===calendarFilter||x.p.child==='家族全員');return `<section class="card"><div class="calendar-head"><strong>📅 ${year}年${month}月</strong><div class="calendar-nav"><button class="light small" onclick="moveCalendarMonth(-1)" aria-label="前の月">‹</button><button class="light small" onclick="calendarToday()">今日</button><button class="light small" onclick="moveCalendarMonth(1)" aria-label="次の月">›</button></div></div><div class="calendar-filter"><label for="calendarPersonFilter">👨‍👩‍👧‍👦 表示する家族</label><select id="calendarPersonFilter" onchange="setCalendarFilter(this.value)"><option value="家族全員" ${calendarFilter==='家族全員'?'selected':''}>全員の予定</option>${state.members.map(n=>`<option value="${esc(n)}" ${calendarFilter===n?'selected':''}>${esc(n)}</option>`).join('')}</select></div><div class="calendar-legend">${state.members.map(n=>`<span>${colorTag(n)}${esc(n)}</span>`).join('')}<span>${colorTag('家族全員')}家族全員</span></div><div class="calendar-grid">${cells}</div><div class="calendar-agenda"><h3>📌 ${esc(dateText(selectedCalendarDate))}の予定（${items.length}件）</h3>${items.length?items.map(x=>`<div class="item"><div style="min-width:0;flex:1"><strong>${colorTag(x.person)}${esc(x.title)}</strong><div class="sub">${esc(x.person||'家族全員')} · ${esc(x.time||'終日')}${repeatInfo(x)}</div></div><button class="light small" onclick="editCalendarItem('${String(x.id).replace(/[^0-9a-zA-Z_-]/g,'')}')">編集</button></div>`).join(''):'<p class="muted">この日の予定はありません</p>'}${selectedShifts.length?`<div class="sub">🕒 この日のシフト（${selectedShifts.length}件）</div>${selectedShifts.map(x=>`<div class="item"><div style="flex:1">${colorTag(x.person)}${esc(x.person)}　${esc(x.start)}〜${esc(x.end)}</div><button class="light small" onclick="editShift('${String(x.id).replace(/[^0-9a-zA-Z_-]/g,'')}')">編集</button></div>`).join('')}`:''}${selectedPickups.length?`<div class="sub">🚗 この日の送迎（${selectedPickups.length}件）</div>${selectedPickups.map(x=>`<div class="item"><div style="flex:1">🚗 ${esc(x.occ.title||x.p.title)}</div><button class="light small" onclick="go('pickups')">回答</button></div>`).join('')}`:''}<div class="row"><button class="light calendar-action" onclick="addCalendarEvent()">＋ 予定</button><button class="light calendar-action" onclick="startShift(selectedCalendarDate)">＋ シフト</button></div></div></section>`}
+function calendarHTML(){const [year,month]=calendarMonth.split('-').map(Number);const start=new Date(year,month-1,1).getDay(),days=new Date(year,month,0).getDate();const eventMap=new Map();for(let day=1;day<=days;day++){const date=dateKey(year,month,day);eventMap.set(date,eventsOn(date,true))}const week=['日','月','火','水','木','金','土'];let cells=week.map(d=>`<div class="calendar-week">${d}</div>`).join('');for(let i=0;i<Math.ceil((start+days)/7)*7;i++){const n=i-start+1;if(n<1||n>days){cells+='<div aria-hidden="true"></div>';continue}const date=dateKey(year,month,n),dayEvents=eventMap.get(date)||[],dayShifts=shiftsOn(date),dayPickups=pickupOn(date).filter(x=>calendarFilter==='家族全員'||x.occ.child===calendarFilter||x.p.child===calendarFilter||x.p.child==='家族全員'),count=dayEvents.length+dayShifts.length+dayPickups.length,classes=[date===today()?'today':'',date===selectedCalendarDate?'selected':''].filter(Boolean).join(' ');cells+=`<button type="button" class="calendar-day ${classes}" aria-label="${month}月${n}日 ${count}件の予定" aria-pressed="${date===selectedCalendarDate}" onclick="selectCalendarDay('${date}')"><span class="calendar-num">${n}</span>${count?`<span class="calendar-labels">${dayEvents.slice(0,2).map(e=>`<span class="calendar-event-label" style="--event-color:${memberColor(e.person)};--event-bg:${memberColor(e.person)}24" title="${esc(e.title)}">${esc(e.title)}</span>`).join('')}${dayShifts.slice(0,Math.max(0,2-dayEvents.length)).map(x=>`<span class="calendar-shift-label" title="${esc(x.person)} ${esc(x.start)}〜${esc(x.end)}">🕒${esc(x.start)}〜${esc(x.end)}</span>`).join('')}${dayPickups.slice(0,Math.max(0,2-dayEvents.length-dayShifts.length)).map(x=>`<span class="calendar-pickup-label" title="${esc(x.occ.title||x.p.title)}">🚗 ${esc(x.occ.title||x.p.title)}</span>`).join('')}${count>2?`<span class="calendar-event-more">＋${count-2}件</span>`:''}</span>`:''}</button>`}const items=eventsOn(selectedCalendarDate,true),selectedShifts=shiftsOn(selectedCalendarDate),selectedPickups=pickupOn(selectedCalendarDate).filter(x=>calendarFilter==='家族全員'||x.occ.child===calendarFilter||x.p.child===calendarFilter||x.p.child==='家族全員');return `<section class="card schedule-calendar-card"><div class="calendar-head"><strong>📅 ${year}年${month}月</strong><div class="calendar-nav"><button class="light small" onclick="moveCalendarMonth(-1)" aria-label="前の月">‹</button><button class="light small" onclick="calendarToday()">今日</button><button class="light small" onclick="moveCalendarMonth(1)" aria-label="次の月">›</button></div></div><div class="calendar-filter"><label for="calendarPersonFilter">👨‍👩‍👧‍👦 表示する家族</label><select id="calendarPersonFilter" onchange="setCalendarFilter(this.value)"><option value="家族全員" ${calendarFilter==='家族全員'?'selected':''}>全員の予定</option>${state.members.map(n=>`<option value="${esc(n)}" ${calendarFilter===n?'selected':''}>${esc(n)}</option>`).join('')}</select></div><details class="calendar-legend-details"><summary>🎨 家族の色を確認</summary><div class="calendar-legend">${state.members.map(n=>`<span>${colorTag(n)}${esc(n)}</span>`).join('')}<span>${colorTag('家族全員')}家族全員</span></div></details><div class="calendar-grid">${cells}</div><div class="calendar-agenda"><h3>📌 ${esc(dateText(selectedCalendarDate))}の予定（${items.length}件）</h3>${items.length?items.map(x=>`<div class="item"><div style="min-width:0;flex:1"><strong>${colorTag(x.person)}${esc(x.title)}</strong><div class="sub">${esc(x.person||'家族全員')} · ${esc(x.time||'終日')}${repeatInfo(x)}</div></div><button class="light small" onclick="editCalendarItem('${String(x.id).replace(/[^0-9a-zA-Z_-]/g,'')}')">編集</button></div>`).join(''):'<p class="muted">この日の予定はありません</p>'}${selectedShifts.length?`<div class="sub">🕒 この日のシフト（${selectedShifts.length}件）</div>${selectedShifts.map(x=>`<div class="item"><div style="flex:1">${colorTag(x.person)}${esc(x.person)}　${esc(x.start)}〜${esc(x.end)}</div><button class="light small" onclick="editShift('${String(x.id).replace(/[^0-9a-zA-Z_-]/g,'')}')">編集</button></div>`).join('')}`:''}${selectedPickups.length?`<div class="sub">🚗 この日の送迎（${selectedPickups.length}件）</div>${selectedPickups.map(x=>`<div class="item"><div style="flex:1">🚗 ${esc(x.occ.title||x.p.title)}</div><button class="light small" onclick="go('pickups')">回答</button></div>`).join('')}`:''}<div class="row"><button class="light calendar-action" onclick="addCalendarEvent()">＋ 予定</button><button class="light calendar-action" onclick="startShift(selectedCalendarDate)">＋ シフト</button></div></div></section>`}
 function addCalendarEvent(){tab='events';editing=null;adding=true;render();document.querySelector('.form')?.scrollIntoView({behavior:'smooth',block:'start'})}
 function editCalendarItem(id){const item=state.events.find(x=>String(x.id)===String(id));if(!item)return;tab='events';editing=item.id;adding=true;render();document.querySelector('.form')?.scrollIntoView({behavior:'smooth',block:'start'})}
 
